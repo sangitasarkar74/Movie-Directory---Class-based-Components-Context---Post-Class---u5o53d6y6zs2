@@ -1,15 +1,19 @@
 import React from "react";
+import { MovieContext } from "./MovieContext";
 
 class MoviesList extends React.Component {
+  static contextType = MovieContext;
 
   render() {
-    
-    // Get movies list using MoviesContext.
+    const { movies, setState } = this.context;
+
+    const handleOnClick = (id) => {
+      setState((state) => ({ ...state, selectedMovieId: id }));
+    };
 
     return (
       <div id="movies-table">
-        <style>{
-        `
+        <style>{`
         td { padding : 20px; }
         tr:hover { background: #3374C2}
         `}</style>
@@ -20,9 +24,15 @@ class MoviesList extends React.Component {
             </tr>
           </thead>
           <tbody>
-              <tr id="table-row">
-                <td>Movie Title</td>
+            {movies.map((movie) => (
+              <tr
+                id={`table-row-${movie.id}`}
+                key={movie.id}
+                onClick={() => handleOnClick(movie.id)}
+              >
+                <td>{movie.title}</td>
               </tr>
+            ))}
           </tbody>
         </table>
       </div>
